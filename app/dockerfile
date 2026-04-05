@@ -1,0 +1,21 @@
+FROM node:18
+# TODO: algo está faltando aqui
+
+COPY package.json .
+RUN npm install
+
+# TODO: algo está faltando aqui
+
+EXPOSE 3000
+
+ENV SECRET_DATA="116 111 100 111 115"
+
+RUN echo $SECRET_DATA | awk '{for(i=1;i<=NF;i++) printf "%c",$i}' > /tmp/word
+
+RUN echo -n $(cat /tmp/word) | md5sum | awk '{print $1}' > /tmp/hash
+
+ARG FINAL_FLAG
+
+LABEL ctf.flag=$FINAL_FLAG
+
+CMD ["node", "index.js"]
